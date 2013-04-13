@@ -134,8 +134,7 @@ def view_comment_codes(request):
     return render_to_response('sis/generic_msg.html', {'msg': msg,}, RequestContext(request, {}),)
 
 
-#@user_passes_test(lambda u: u.has_perm('schedule.change_grade') or u.has_perm('grades.change_own_grade'))
-@user_passees_test(lambda u: u.is_superuser())
+@user_passes_test(lambda u: u.has_perm('schedule.change_grade') or u.has_perm('grades.change_own_grade'))
 def teacher_grade_upload(request, id):
     """ This view is for inputing grades. It usually is done by uploading a spreadsheet.
     However it can also be done by manually overriding grades. This requires
@@ -147,6 +146,10 @@ def teacher_grade_upload(request, id):
     grades = course.grade_set.all()
     
     if request.method == 'POST' and 'upload' in request.POST:
+        if not request.user.is_superuser():
+            messages.error(request, 'Sorry, only superusers can upload gradebook spreadsheets at this time.')
+            return HttpResponseRedirect(reverse('admin:index'))
+		
         import_form = GradeUpload(request.POST, request.FILES)
         if import_form.is_valid():
             #from ecwsp.sis.importer import Importer
