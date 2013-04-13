@@ -148,8 +148,10 @@ def teacher_grade_upload(request, id):
     if request.method == 'POST' and 'upload' in request.POST:
         import_form = GradeUpload(request.POST, request.FILES)
         if import_form.is_valid():
-            from ecwsp.sis.importer import Importer
-            importer = Importer(request.FILES['file'], request.user)
+            #from ecwsp.sis.importer import Importer
+            #importer = Importer(request.FILES['file'], request.user)
+            from ecwsp.benchmark_grade.importer import BenchmarkGradeImporter
+            importer = BenchmarkGradeImporter(request.FILES['file'], request.user)
             error = importer.import_grades(course, import_form.cleaned_data['marking_period'])
             if error:
                 messages.warning(request, error)
