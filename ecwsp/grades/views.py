@@ -134,7 +134,8 @@ def view_comment_codes(request):
     return render_to_response('sis/generic_msg.html', {'msg': msg,}, RequestContext(request, {}),)
 
 
-@user_passes_test(lambda u: u.has_perm('schedule.change_grade') or u.has_perm('grades.change_own_grade'))
+#@user_passes_test(lambda u: u.has_perm('schedule.change_grade') or u.has_perm('grades.change_own_grade'))
+@user_passees_test(lambda u: u.is_superuser())
 def teacher_grade_upload(request, id):
     """ This view is for inputing grades. It usually is done by uploading a spreadsheet.
     However it can also be done by manually overriding grades. This requires
