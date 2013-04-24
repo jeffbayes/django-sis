@@ -146,7 +146,7 @@ def teacher_grade_upload(request, id):
     grades = course.grade_set.all()
     
     if request.method == 'POST' and 'upload' in request.POST:
-        if not request.user.is_superuser():
+        if not request.user.is_superuser:
             messages.error(request, 'Sorry, only superusers can upload gradebook spreadsheets at this time.')
             return HttpResponseRedirect(reverse('admin:index'))
 		
